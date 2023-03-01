@@ -24,7 +24,7 @@ provenance:
       url: http://gpcp.umd.edu/
   license: "No constraints on data access or use."
 maintainers:
-  - name: "Charles            Stern"
+  - name: "Charles             Stern"
     orcid: "0000-0002-4078-0852"
     github: cisaacstern
 bakery:
