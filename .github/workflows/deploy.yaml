@@ -1,0 +1,31 @@
+name: Deploy recipes
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [ opened, reopened, synchronize, labeled ]
+    
+jobs:
+  deploy-recipes:
+    name: deploy-recipes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 'Authenticate to Google Cloud'
+      id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}'
+    - name: 'Deploy recipes'
+      uses: 'pangeo-forge/deploy-recipe-action@first-pass'
+      with:
+        repo: '${{ github.event.repo.html_url }}' 
+        ref: '${{ github.sha }}'
+        pangeo_forge_runner_config: '{}'
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: '${{ steps.auth.outputs.credentials_file_path }}'
