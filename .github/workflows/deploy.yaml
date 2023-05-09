@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "beam-refactor" ]
     types: [ opened, reopened, synchronize, labeled ]
     
 jobs:
