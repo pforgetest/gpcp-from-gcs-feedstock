@@ -24,8 +24,6 @@ jobs:
     - name: 'Deploy recipes'
       uses: 'pangeo-forge/deploy-recipe-action@first-pass'
       with:
-        repo: '${{ github.event.repo.html_url }}' 
-        ref: '${{ github.sha }}'
         pangeo_forge_runner_config: '{}'
       env:
         GOOGLE_APPLICATION_CREDENTIALS: '${{ steps.auth.outputs.credentials_file_path }}'
