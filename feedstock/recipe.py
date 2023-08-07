@@ -28,3 +28,8 @@ recipe = (
         combine_dims=pattern.combine_dim_keys,
     )
 )
+
+recipe_dict = {
+    "gpcp-dict-key-0": recipe,
+    "gpcp-dict-key-1": recipe,
+}
