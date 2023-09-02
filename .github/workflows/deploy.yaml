@@ -1,0 +1,52 @@
+name: Deploy recipes
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "beam-refactor" ]
+    types: [ opened, reopened, synchronize, labeled ]
+    
+jobs:
+  deploy-recipes:
+    name: deploy-recipes
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: 'Authenticate to Google Cloud'
+      id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_DATAFLOW_SERVICE_KEY }}'
+    - name: 'Deploy recipes'
+      uses: 'pangeo-forge/deploy-recipe-action@first-pass'
+      with:
+        pangeo_forge_runner_config: >
+          {
+          "Bake": {
+            "prune": true,
+            "bakery_class": "pangeo_forge_runner.bakery.dataflow.DataflowBakery"
+          },
+          "DataflowBakery": {
+            "project_id": "pangeo-forge-4967",
+            "service_account_email": "pangeo-forge-dataflow@pangeo-forge-4967.iam.gserviceaccount.com",
+            "temp_gcs_location": "gs://pangeo-forge-runner-ci-testing/temp"
+          },
+          "TargetStorage": {
+            "fsspec_class": "gcsfs.GCSFileSystem",
+            "root_path": "gs://pangeo-forge-runner-ci-testing/target/{job_name}"
+          },
+          "InputCacheStorage": {
+            "fsspec_class": "gcsfs.GCSFileSystem",
+            "root_path": "gs://pangeo-forge-runner-ci-testing/input-cache/{job_name}"
+          },
+          "MetadataCacheStorage": {
+            "fsspec_class": "gcsfs.GCSFileSystem",
+            "root_path": "gs://pangeo-forge-runner-ci-testing/metadata-cache/{job_name}"
+          }
+          }
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: '${{ steps.auth.outputs.credentials_file_path }}'
