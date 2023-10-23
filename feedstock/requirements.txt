@@ -1,2 +1,2 @@
-pangeo-forge-recipes==0.10.0
+pangeo-forge-recipes==0.10.4
 gcsfs
