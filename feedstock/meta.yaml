@@ -5,8 +5,7 @@ description: >
 pangeo_forge_version: "0.9.0"
 pangeo_notebook_version: "2022.06.02"
 recipes:
-  - id: gpcp-from-gcs
-    object: "recipe:recipe"
+  - dict_object: "recipe:recipe_dict"
 provenance:
   providers:
     - name: "NOAA NCEI"

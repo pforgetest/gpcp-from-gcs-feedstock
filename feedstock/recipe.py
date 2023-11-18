@@ -18,13 +18,23 @@ concat_dim = ConcatDim("time", dates, nitems_per_file=1)
 pattern = FilePattern(make_url, concat_dim)
 
 
-
-recipe = (
-    beam.Create(pattern.items())
-    | OpenURLWithFSSpec()
-    | OpenWithXarray(file_type=pattern.file_type, xarray_open_kwargs={"decode_coords": "all"})
-    | StoreToZarr(
-        store_name="gpcp",
-        combine_dims=pattern.combine_dim_keys,
-    )
-)
+recipe_dict = {
+    "gpcp-dict-key-0": (
+        beam.Create(pattern.items())
+        | OpenURLWithFSSpec()
+        | OpenWithXarray(file_type=pattern.file_type, xarray_open_kwargs={"decode_coords": "all"})
+        | StoreToZarr(
+            store_name="gpcp-dict-key-0",
+            combine_dims=pattern.combine_dim_keys,
+        )
+    ),
+    "gpcp-dict-key-1": (
+        beam.Create(pattern.items())
+        | OpenURLWithFSSpec()
+        | OpenWithXarray(file_type=pattern.file_type, xarray_open_kwargs={"decode_coords": "all"})
+        | StoreToZarr(
+            store_name="gpcp-dict-key-1",
+            combine_dims=pattern.combine_dim_keys,
+        )
+    ),
+}
